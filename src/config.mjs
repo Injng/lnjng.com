@@ -2,7 +2,7 @@ export default {
     title: "Homepage",
     titleSuffix: " | lnjng",
     description: "Recreational computer science.",
-    defaultOgImage: "./defaultog.jpg",
+    defaultOgImage: "./assets/logo.png",
     latestPosts: 3,
     postsPerPage: 3,
     url: "https://lnjng.com",

@@ -185,30 +185,9 @@ declare module 'astro:content' {
 
 	type ContentEntryMap = {
 		"blog": {
-"chemex.mdx": {
-	id: "chemex.mdx";
-  slug: "chemex";
-  body: string;
-  collection: "blog";
-  data: InferEntrySchema<"blog">
-} & { render(): Render[".mdx"] };
-"coffee.mdx": {
-	id: "coffee.mdx";
-  slug: "coffee";
-  body: string;
-  collection: "blog";
-  data: InferEntrySchema<"blog">
-} & { render(): Render[".mdx"] };
-"gesha.mdx": {
-	id: "gesha.mdx";
-  slug: "gesha";
-  body: string;
-  collection: "blog";
-  data: InferEntrySchema<"blog">
-} & { render(): Render[".mdx"] };
-"sink.mdx": {
-	id: "sink.mdx";
-  slug: "sink";
+"prefix_sums.mdx": {
+	id: "prefix_sums.mdx";
+  slug: "prefix_sums";
   body: string;
   collection: "blog";
   data: InferEntrySchema<"blog">
@@ -228,8 +207,8 @@ declare module 'astro:content' {
 
 	type DataEntryMap = {
 		"author": {
-"palmiak": {
-	id: "palmiak";
+"lnjng": {
+	id: "lnjng";
   collection: "author";
   data: InferEntrySchema<"author">
 };
