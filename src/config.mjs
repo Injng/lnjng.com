@@ -1,7 +1,7 @@
 export default {
     title: "Homepage",
-    titleSuffix: " | Pacamara ☕",
-    description: "Aromatic brew, pure indulgence, exquisite satisfaction.Default description",
+    titleSuffix: " | lnjng",
+    description: "Recreational computer science.",
     defaultOgImage: "./defaultog.jpg",
     latestPosts: 3,
     postsPerPage: 3,
@@ -9,12 +9,12 @@ export default {
     social: {
         'dribbble': false,
         'facebook': false,
-        'github': 'https://github.com/palmiak',
+        'github': 'https://github.com/Injng',
         'instagram': false,
         'mastodon': false,
         'pinterest': false,
         'skype': false,
-        'twitter': 'https://twitter.com/palmiak_fp'
+        'twitter': false,
 
     }
 }
