@@ -19,8 +19,13 @@ import slide5 from '../../assets/slide-5.jpg';
         dark:prose-headings:text-white
     ">
     <Image src={logoImage} width={200} alt="" loading="eager" decoding="sync" class="relative w-[150px] lg:w-[220px] rounded-[15px] image-shine"  />
-    <p>
-        Hello world! I'm a high school student passionate about CS.
+    <p x-data="{ greetings: ['Hello!', '你好!', 'Bonjour!', 'Hola!', 'こんにちは!', 'Hallo!'], hobbies: ['computer science', 'music', 'math', 'reading wikipedia'], greetingsIndex: 0, hobbiesIndex: 0 }"
+       x-init="setInterval(() => { greetingsIndex = (greetingsIndex + 1) % greetings.length; hobbiesIndex = (hobbiesIndex + 1) % hobbies.length; }, 2000)"
+       x-text="greetings[greetingsIndex] + ` I'm a high school student who's passionate about ` + hobbies[hobbiesIndex] + `.`">
     </p>
-    <h1><span class="gradient-underline"><span>The art of having fun while programming: recreational computer science.</span></span></h1>
+    <h1 x-data="{ adjWords: ['useless', 'fun', 'quirky'], nounWords: ['nerd', 'programmer', 'geek', 'developer', 'student'], currentAdjIndex: 0, currentNounIndex: 0 }"
+        x-init="setInterval(() => { currentAdjIndex = (currentAdjIndex + 1) % adjWords.length; currentNounIndex = (currentNounIndex + 1) % nounWords.length; }, 2000)">
+    <span class="gradient-underline"><span x-text="'Building ' + adjWords[currentAdjIndex] + ' things. Also I am a ' + nounWords[currentNounIndex] + '.'"></span></span>
+    </h1></span></span></span>
+    </h1>
 </section>
