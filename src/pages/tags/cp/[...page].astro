@@ -1,15 +1,14 @@
 ---
 import { getCollection } from "astro:content";
-import config from '../../config.mjs';
+import config from '../../../config.mjs';
 
 
-import Base from "../../layouts/Base.astro";
-import Post from "../../components/blog/Post.astro";
+import Base from "../../../layouts/Base.astro";
+import Post from "../../../components/blog/Post.astro";
 
 export async function getStaticPaths({paginate}) {
     const blogEntries = (await getCollection('blog', ({ data }) => {
-        // return data.tag == "cp";
-        return true;
+        return data.tag == "cp";
     })).sort(
         (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
     );
