@@ -185,6 +185,13 @@ declare module 'astro:content' {
 
 	type ContentEntryMap = {
 		"blog": {
+"hello_flutter.mdx": {
+	id: "hello_flutter.mdx";
+  slug: "hello_flutter";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".mdx"] };
 "prefix_sums.mdx": {
 	id: "prefix_sums.mdx";
   slug: "prefix_sums";

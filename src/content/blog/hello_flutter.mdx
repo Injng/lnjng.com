@@ -1,0 +1,55 @@
+---
+title: Hello, Flutter!
+pubDate: 2024-03-20
+intro: Exploring cross-platform app development...
+tag: road-to-flutter
+author: lnjng 
+---
+
+The past few days I've been exeprimenting with **Project IDX**, a up and coming IDE developed
+by Google, based on VSCode but runs on Google's Cloud Workstations so you can access an entire
+environment from the web. Generally I'm wary about using proprietary tools (go neovim and 
+vscodium!!), but as I was genuinely interested in what Google could come up with (and because
+Google already has my data + Microsoft already has all my code through GitHub) I signed myself
+up for the waitlist.
+
+Upon looking through what IDX had to offer, I stumbled across **Flutter**: a cross-platform
+app development framework. I'd heard about it in the past, but this time I was motivated to dig
+a little deeper.
+
+I've never touched app development, especially for mobile platforms, so I thought I could do
+some learning here and engage in some recreational development! So, here we are, on the
+*road-to-flutter*.
+
+## Hello, Dart!
+Flutter happens to be based on the language known as **Dart**. Therefore, in order
+to get good at Flutter, one needs to get good at Dart. Thus, after looking through a primer
+at [Learn dart in Y Minutes](https://learnxinyminutes.com/docs/dart/), I was ready to tackle
+some programming on my own.
+
+First up was, of course, the classic *hello world* program. To make things easier, I decided
+to use [Dartpad](https://dartpad.dev), a browser-based Dart playground. To print to stdout, one
+uses the `print` function:
+
+```dart
+void main() {
+  print("Hello, world!");
+}
+```
+
+This is among the easiest of the C-style languages I've had experience with to print something
+out. However, you could add a variable for more extensibility:
+
+```dart
+void main() {
+  var name = "Dart"; // or perhaps const NAME
+  print("Hello, ${name}!");
+}
+```
+
+Here, string interpolation was used by using `${}` with the variable name between the brackets.
+It is also useful to note that string concatenation can be achieved by just placing strings
+next to each other, no operator needed.
+
+Next time, I would love to try out some Advent of Code problems (another stepping stone on my
+classic path to programming language familiarity)!
