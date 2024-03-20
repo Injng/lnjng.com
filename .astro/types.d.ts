@@ -192,6 +192,13 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".mdx"] };
+"maybe_type.mdx": {
+	id: "maybe_type.mdx";
+  slug: "maybe_type";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".mdx"] };
 "prefix_sums.mdx": {
 	id: "prefix_sums.mdx";
   slug: "prefix_sums";

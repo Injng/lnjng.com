@@ -8,7 +8,7 @@ import Post from "../../../components/blog/Post.astro";
 
 export async function getStaticPaths({paginate}) {
     const blogEntries = (await getCollection('blog', ({ data }) => {
-        return data.tag == "cp";
+        return data.tag == "cs";
     })).sort(
         (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
     );
