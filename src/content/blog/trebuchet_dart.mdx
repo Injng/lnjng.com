@@ -1,0 +1,104 @@
+---
+title: "Trebuchet with Dart (1)"
+pubDate: 2024-04-05
+intro: "Calibrate a tree bucket with Dart."
+tag: road-to-flutter
+author: lnjng
+---
+
+The entire narrative is at
+ [Day 1 of AoC 2023](https://adventofcode.com/2023/day/1), but in essence
+we are tasked with decoding a file with obfuscated values. Each line of the
+file has a value we need to extract, and the answer is the sum of all of
+these values.
+
+The correct value for each line is the first and last numeric digit in that
+line. For example, the line `tr3b2c4et` has a value of 34, and the line 
+`tr4e` has a value of 44.
+
+## Implementation
+This problem boils down to how we can find the first and last numbers in 
+a string. The simplest way to do this is to have two for loops, one starting
+from the beginning and incrementing, and one starting from the end and
+decrementing. Each for loop will break once it hits a number.
+
+The question, then, is how do we know that a string is a number? We can do
+this through the `tryParse` function, defined for the `int` class. More 
+specifically, given a string `str`, `int.tryParse(str)` will return an int
+if `str` is an integer, otherwise it will return null. Therefore, we know
+a character is an integer if passing it through this method results in a
+non-null value.
+
+```dart
+// final calibration value
+int calibration = 0;
+
+// search from the beginning for first number
+for (int i = 0; i < text.length; i++) {
+    int? value = int.tryParse(text[i]);
+    if (value != null) {
+        calibration += 10 * value;
+        break;
+    }
+}
+```
+
+Here we see the first for loop. Notice that since there is a possibility
+that `value` is null, we have to define it with the `int?` type to reflect
+that.
+
+Now, to tackle the problem of reading input. We can read input from a file
+by using dart's `dart:io` package along with the `File` object:
+
+```dart
+import 'dart:io';
+
+final file = File('day1.in');
+int values = 0;
+List<String> lines = file.readAsLinesSync();
+```
+
+This reads the lines from the file called `day1.in`, which is our input file.
+These lines are read into a `List<String>`. If we wrap our previous logic
+in a function, then loop over each line, we get our final code:
+
+```dart
+import 'dart:io';
+
+int getValues(String text) {
+    // final calibration value
+    int calibration = 0;
+
+    // search from the beginning for first number
+    for (int i = 0; i < text.length; i++) {
+        int? value = int.tryParse(text[i]);
+        if (value != null) {
+            calibration += 10 * value;
+            break;
+        }
+    }
+
+    // search from the end for first number
+    for (int i = text.length - 1; i >= 0; i--) {
+        int? value = int.tryParse(text[i]);
+        if (value != null) {
+            calibration += value;
+            break;
+        }
+    }
+
+    return calibration;
+}
+
+void main() {
+    final file = File('day1.in');
+    int values = 0;
+    List<String> lines = file.readAsLinesSync();
+
+    for (String line in lines) {
+        values += getValues(line);
+    }
+
+    print(values);
+}
+```

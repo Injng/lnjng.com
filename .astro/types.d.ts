@@ -206,6 +206,13 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".mdx"] };
+"trebuchet_dart.mdx": {
+	id: "trebuchet_dart.mdx";
+  slug: "trebuchet_dart";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".mdx"] };
 };
 "page": {
 "about-me.mdx": {
