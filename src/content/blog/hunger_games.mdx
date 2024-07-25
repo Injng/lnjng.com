@@ -1,0 +1,162 @@
+---
+title: Hunger Games in Rust
+pubDate: 2024-07-23
+intro: Darwin's ultimate game.
+tag: genetic-algorithms
+author: lnjng 
+---
+
+Continuing with our journey with genetic algorithms, let's create a game to run our algorithms
+upon. This is gonna be a really contrived example, but it's fine -- recreational programming
+doens't have to be useful!
+
+To begin, we can imagine a board with cells, and entities that live within the cells. These entities
+can be in two different states: moving, or fighting. Entities move on each turn, and if more than one
+entity occupy the same cell, they will fight until only one remains.
+
+## Encoding Behavior
+We want each entity to have different behavior. In the future, we will modify (mutate) this behavior
+in generations, making each generation of entities better (hopefully) than the last. We encode 
+this behavior in a struct called `Chromosome`:
+
+```rs
+pub struct Chromosome {
+    pub strength: u32,
+    pub aggressive: u32,
+    pub agility: u32,
+}
+```
+
+Here, we see that we have three `u32` values to work with: the strength of an entity, how aggressive
+it is, and how agile it is.
+
+# Movement
+The first step in each turn of this game is that the entities *move*. Movement is based upon two
+genes: `aggressive` and `agility`. How aggressive the entity is determines where it moves: the more
+aggressive it is, the more likely it is to purposely move *towards* another entity. The agility of
+an entity directly determines the speed of the entity.
+
+In order to determine where the entity should move, we first determine the distances on each cell of
+the board to the nearest entity:
+
+```rs
+pub fn get_distances(cells: &mut [[Cell; COLS as usize]; ROWS as usize]) -> [[f32; COLS as usize]; ROWS as usize] {
+    let mut distances: [[f32; COLS as usize]; ROWS as usize] = [[MAX as f32; COLS as usize]; ROWS as usize];
+    for i in 0..ROWS {
+        for j in 0..COLS {
+            if !cells[i as usize][j as usize].entities.is_empty() {
+                for k in 0..ROWS {
+                    for l in 0..COLS {
+                        let distance = ((i as i32 - k as i32).pow(2) + (j as i32 - l as i32).pow(2)) as f32;
+                        if distance < distances[k as usize][l as usize] {
+                            distances[k as usize][l as usize] = distance;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    distances
+}
+```
+
+While this set of four nested for loops may not be the most efficient, it is good enough for our
+needs. Next, we can implement a movement method for each entity, using weighted randomness to
+determine the direction:
+
+```rs
+impl Entity {
+    /* -- snip -- */
+
+    // move left, right, up, and down depending on aggressiveness and agility
+    pub fn move_entity(&mut self, distances: &[[f32; COLS as usize]; ROWS as usize], agile: bool) {
+        // order the cells by distance in increasing order
+        let mut cells: Vec<Cell> = Vec::new();
+        if self.x > 0 {
+            cells.push(Cell { x: self.x - 1, y: self.y, entities: Vec::new() });
+        }
+        if self.x < COLS - 1 {
+            cells.push(Cell { x: self.x + 1, y: self.y, entities: Vec::new() });
+        }
+        if self.y > 0 {
+            cells.push(Cell { x: self.x, y: self.y - 1, entities: Vec::new() });
+        }
+        if self.y < ROWS - 1 {
+            cells.push(Cell { x: self.x, y: self.y + 1, entities: Vec::new() });
+        }
+        cells.sort_by(|a, b| {
+            let distance_a = distances[a.y as usize][a.x as usize];
+            let distance_b = distances[b.y as usize][b.x as usize];
+            distance_a.partial_cmp(&distance_b).unwrap()
+        });
+
+        // if less than 4 cells in vector, pad to 4 with last cell
+        while cells.len() < 4 {
+            cells.push(cells[cells.len() - 1].clone());
+        }
+
+        // move to the closest cell with a probability based on aggressiveness
+        let bounds = Uniform::from(0..100);
+        let mut rng = rand::thread_rng();
+        let first = bounds.sample(&mut rng);
+        let second = bounds.sample(&mut rng);
+        let third = bounds.sample(&mut rng);
+        if first < self.chromosome.aggressive {
+            self.x = cells[0].x;
+            self.y = cells[0].y;
+        } else if second < self.chromosome.aggressive {
+            self.x = cells[1].x;
+            self.y = cells[1].y;
+        } else if third < self.chromosome.aggressive {
+            self.x = cells[2].x;
+            self.y = cells[2].y;
+        } else {
+            self.x = cells[3].x;
+            self.y = cells[3].y;
+        }
+
+        // if agility is greater than 50, move again without recalculating distances
+        if agile && self.chromosome.agility > 50 {
+            self.move_entity(&distances, false);
+        }
+    }
+}
+```
+
+Notice that a high agility allows the entity to run the move method again, essentially moving
+twice in the same game turn.
+
+## Fighting
+When more than one entity occupies the same cell on the grid, the winner is determined by 
+whichever entity has the higher `strength` gene. If two entities have the same strength,
+randomness is used to determine the winner:
+
+```rs
+for i in 0..ROWS {
+    for j in 0..COLS {
+        let cell = &mut cells[i as usize][j as usize];
+
+        // exit early if no conflicting entities in cell
+        if cell.entities.len() < 2 {
+            continue;
+        }
+
+        // make the strongest entity win
+        let mut strongest: &Entity = &cell.entities[0];
+        for entity in &cell.entities {
+            if entity.chromosome.strength > strongest.chromosome.strength {
+                strongest = entity;
+            } else if entity.chromosome.strength == strongest.chromosome.strength {
+                let mut rng = rand::thread_rng();
+                let winner = rng.gen_range(0..2);
+                if winner == 1 { strongest = entity; }
+            }
+        }
+        cell.entities = vec![*strongest];
+    }
+}
+```
+
+Next time, we'll start looking into how we can begin mutating these entities to create
+some simulated evolution!
+
