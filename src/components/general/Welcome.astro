@@ -14,7 +14,7 @@ import logoImage from '../../assets/logo.png';
         dark:prose-headings:text-white
     ">
     <Image src={logoImage} width={200} alt="" loading="eager" decoding="sync" class="relative w-[150px] lg:w-[220px] rounded-[15px] image-shine"  />
-    <p x-data="{ greetings: ['Hello!', '你好!', 'Bonjour!', '¡Hola!', 'こんにちは!', 'Hallo!'], hobbies: ['computer science', 'music', 'math', 'reading wikipedia'], greetingsIndex: 0, hobbiesIndex: 0 }"
+    <p x-data="{ greetings: ['Hello!', '你好!', 'Bonjour!', '¡Hola!', 'こんにちは!', 'Hallo!'], hobbies: ['computer science', 'music', 'math', 'hacking', 'airplanes'], greetingsIndex: 0, hobbiesIndex: 0 }"
        x-init="setInterval(() => { greetingsIndex = (greetingsIndex + 1) % greetings.length; hobbiesIndex = (hobbiesIndex + 1) % hobbies.length; }, 2000)"
        x-text="greetings[greetingsIndex] + ` I'm a high school student who's passionate about ` + hobbies[hobbiesIndex] + `.`">
     </p>
