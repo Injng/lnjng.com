@@ -23,11 +23,3 @@
     Type <span class="text-nvim-blue">:home&lt;Enter&gt;</span> to return to the home page
   </p>
 </div>
-
-<style>
-  :global(body) {
-    font-family: monospace;
-    font-size: 14px;
-    line-height: 1.5;
-  }
-</style>

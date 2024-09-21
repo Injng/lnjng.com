@@ -11,7 +11,8 @@ export default {
                 'nvim-gray': '#5c6370',
                 'nvim-blue': '#61afef',
                 'nvim-green': '#98c379',
-                'nvim-statusline': '#21252b'
+                'nvim-statusline': '#21252b',
+                'nvim-cursor': '#d8dee9'
             }
         }
     },
