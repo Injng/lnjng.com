@@ -9,6 +9,10 @@
     let page: string = 'home';
     let mainElement: HTMLElement;
 
+    // number of times to repeat command, and whether or not a number is being inputted
+    let repeat = 1;
+    let inputNumber = false;
+
     // cursor state
     let lines: {char: string, rect: DOMRect}[][] = [];
     let cursorRow = 0;
@@ -84,13 +88,31 @@
         if (mode === 'NORMAL') {
             if (event.key === 'Escape') {
                 showCursor = false;
+                inputNumber = false;
             } else if (event.key === ':') {
                 mode = 'COMMAND';
                 input.set(':');
-            } else if (['h', 'j', 'k', 'l'].includes(event.key)) {
-                moveCursor(event.key);
+                inputNumber = false;
+            } else if (['h', 'j', 'k', 'l', '$'].includes(event.key)) {
+                inputNumber = false;
+                for (let i = 0; i < repeat; i++) {
+                    moveCursor(event.key);
+                }
+                repeat = 1;
+            } else if (/\d/.test(event.key)) {
+                if (inputNumber) {
+                    repeat = repeat * 10 + parseInt(event.key);
+                } else {
+                    if (parseInt(event.key) === 0) {
+                        moveCursor(event.key);
+                        return;
+                    }
+                    repeat = parseInt(event.key);
+                    inputNumber = true;
+                }
             }
         } else if (mode === 'COMMAND') {
+            inputNumber = false;
             if (event.key === 'Enter') {
                 handleCommand($input);
                 input.set('');
@@ -129,6 +151,16 @@
             case 'j':
                 cursorRow = Math.min(lines.length - 1, cursorRow + 1);
                 cursorCol = movementLast ? lines[cursorRow].length - 1 : Math.min(movementCol, lines[cursorRow].length - 1);
+                break;
+            case '0':
+                cursorCol = 0;
+                movementCol = cursorCol;
+                movementLast = false;
+                break;
+            case '$':
+                cursorCol = lines[cursorRow].length - 1;
+                movementCol = cursorCol;
+                movementLast = true;
                 break;
         }
 
