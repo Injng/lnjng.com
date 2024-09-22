@@ -2,6 +2,11 @@
     export let data;
 </script>
 
+<svelte:head>
+	<title>lnjng's Blog</title>
+	<meta property="og:title" content="lnjng's Blog" />
+</svelte:head>
+
 <div class="flex flex-col h-full pl-6 pt-4">
     <h2 class="text-nvim-blue font-bold mb-2">Blog Posts</h2>
     <ul class="list-none p-0 m-0">

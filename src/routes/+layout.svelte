@@ -14,7 +14,7 @@
     let inputNumber = false;
 
     // cursor state
-    let lines: {char: string, rect: DOMRect}[][] = [];
+    let lines: {char: string, rect: DOMRect, href: string}[][] = [];
     let cursorRow = 0;
     let cursorCol = 0;
 
@@ -45,12 +45,17 @@
 
         // create a tree walker to walk through all text nodes in the main element
         const walker = document.createTreeWalker(mainElement, NodeFilter.SHOW_TEXT, null);
-        const newCharacters: {char: string, rect: DOMRect}[] = [];
+        const newCharacters: {char: string, rect: DOMRect, href: string}[] = [];
 
         // iterate through all text nodes and their characters
         let node;
         while (node = walker.nextNode()) {
             if (node.textContent?.trim()) {
+                // Check if the node is within a link
+                const parentAnchor = node.parentElement?.closest('a');
+                const href = parentAnchor?.getAttribute('href') || '';
+
+                // iterate through each character
                 const range = document.createRange();
                 for (let i = 0; i < node.textContent.length; i++) {
                     range.setStart(node, i);
@@ -58,7 +63,7 @@
                     const rect = range.getBoundingClientRect();
                     rect.x -= 24;
                     if (rect.width > 0 && rect.height > 0) {
-                        newCharacters.push({ char: node.textContent[i], rect });
+                        newCharacters.push({ char: node.textContent[i], rect, href });
                     }
                 }
             }
@@ -68,7 +73,7 @@
         newCharacters.sort((a, b) => a.rect.y - b.rect.y);
 
         // group characters into lines
-        const newLines: {char: string, rect: DOMRect}[][] = [];
+        const newLines: {char: string, rect: DOMRect, href: string}[][] = [];
         for (const char of newCharacters) {
             if (newLines.length === 0) {
                 newLines.push([char]);
@@ -110,6 +115,14 @@
                     repeat = parseInt(event.key);
                     inputNumber = true;
                 }
+            } else if (event.key === 'Enter') {
+                inputNumber = false;
+                if (lines[cursorRow][cursorCol].href !== '') {
+                    goto(lines[cursorRow][cursorCol].href, { replaceState: false });
+                } else {
+                    moveCursor('j');
+                }
+                repeat = 1;
             }
         } else if (mode === 'COMMAND') {
             inputNumber = false;
@@ -180,7 +193,6 @@
             goto('/blog', { replaceState: false });
         }
     }
-    
 </script>
 
 <svelte:window on:keydown={handleKeydown} />

@@ -1,3 +1,8 @@
+<svelte:head>
+	<title>lnjng</title>
+	<meta property="og:title" content="lnjng's Homepage" />
+</svelte:head>
+
 <div class="flex flex-col items-center justify-center h-full">
     <h1 class="text-4xl font-bold mb-8 text-nvim-blue">Hello, I'm lnjng</h1>
     <div class="text-center">
