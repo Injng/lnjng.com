@@ -1,51 +1,59 @@
 <script lang="ts">
     import { writable } from 'svelte/store';
-    import { onMount, afterUpdate } from 'svelte';
-    import { goto } from '$app/navigation';
+    import { onMount } from 'svelte';
     import '../app.css';
 
     const input = writable('');
     let mode = 'NORMAL';
     let page: string = 'Home';
     let mainElement: HTMLElement;
+    let pageChange = 0;
 
     // number of times to repeat command, and whether or not a number is being inputted
     let repeat = 1;
     let inputNumber = false;
 
     // cursor state
-    let lines: {char: string, rect: DOMRect, href: string}[][] = [];
+    let lines: {char: string, index: number, rect: DOMRect, href: string}[][] = [];
     let cursorRow = 0;
     let cursorCol = 0;
+
+    // the total character count
+    let totalCharCount = 0;
 
     // the column to move to when moving up or down
     let movementCol = 0;
 
     // whether or not the cursor was at the last column when moving up or down
-    let movementLast = false;
+    let movementLast = true;
 
     // whether or not to show the cursor and where to show the cursor
     $: showCursor = false;
     $: cursorStyle = 'display: none;';
 
+    // monitor the cursor's position within the viewport
+    let viewTop = 0;
+    let viewBottom = 0;
+    let cursorY = 0;
+
     onMount(() => {
         updateCharacters();
-    });
-
-    afterUpdate(() => {
-        updateCharacters();
+        viewBottom = window.innerHeight;
+        window.addEventListener('resize', () => {
+            viewBottom = window.innerHeight;
+        });
     });
 
     /**
      * Update the characters array with the current characters and their bounding rects
      */
-    function updateCharacters() {
+    function updateCharacters(): {char: string, index: number, rect: DOMRect, href: string}[][] {
         // guard the mainElement
-        if (!mainElement) return;
+        if (!mainElement) return [];
 
         // create a tree walker to walk through all text nodes in the main element
         const walker = document.createTreeWalker(mainElement, NodeFilter.SHOW_TEXT, null);
-        const newCharacters: {char: string, rect: DOMRect, href: string}[] = [];
+        const newCharacters: {char: string, index: number, rect: DOMRect, href: string}[] = [];
 
         // iterate through all text nodes and their characters
         let node;
@@ -63,7 +71,7 @@
                     const rect = range.getBoundingClientRect();
                     rect.x -= 24;
                     if (rect.width > 0 && rect.height > 0) {
-                        newCharacters.push({ char: node.textContent[i], rect, href });
+                        newCharacters.push({ char: node.textContent[i], index: 0, rect, href });
                     }
                 }
             }
@@ -73,7 +81,7 @@
         newCharacters.sort((a, b) => a.rect.y - b.rect.y);
 
         // group characters into lines
-        const newLines: {char: string, rect: DOMRect, href: string}[][] = [];
+        const newLines: {char: string, index: number, rect: DOMRect, href: string}[][] = [];
         for (const char of newCharacters) {
             if (newLines.length === 0) {
                 newLines.push([char]);
@@ -86,7 +94,23 @@
                 }
             }
         }
+
+        // add an index to each row whose y is greater than 0
+        let charIndex = 0;
+        for (const line of newLines) {
+            for (const char of line) {
+                if (char.rect.y > 0) {
+                    char.index = charIndex;
+                }
+            }
+            if (line[0].rect.y > 0) {
+                charIndex++;
+            }
+        }
+        totalCharCount = charIndex;
+
         lines = newLines;
+        return newLines;
     }
 
     function handleKeydown(event: KeyboardEvent) {
@@ -122,7 +146,8 @@
                     if (lines[cursorRow][cursorCol].href.startsWith('http')) {
                         window.open(lines[cursorRow][cursorCol].href, '_blank');
                     } else {
-                        goto(lines[cursorRow][cursorCol].href, { replaceState: false });
+                        pageChange = 0;
+                        window.location.href = lines[cursorRow][cursorCol].href;
                     }
                 } else {
                     moveCursor('j');
@@ -147,7 +172,7 @@
         event.preventDefault();
     }
 
-    function moveCursor(key: string) {
+    async function moveCursor(key: string) {
         if (lines.length === 0) return;
 
         showCursor = true;
@@ -182,21 +207,56 @@
                 break;
         }
 
-        cursorStyle = lines[cursorRow][cursorCol] ? 
-            `left: ${lines[cursorRow][cursorCol].rect.left}px; 
-            top: ${lines[cursorRow][cursorCol].rect.top}px; 
-            width: ${lines[cursorRow][cursorCol].rect.width}px; 
-            height: ${lines[cursorRow][cursorCol].rect.height}px;` : '';
+        // ensure the cursor is visible by scrolling with a padding of 100
+        const cursorRect = lines[cursorRow][cursorCol].rect;
+        cursorY = cursorRect.y;
+        if (cursorY - viewTop < 200 && key === 'k' && cursorY > viewTop) {
+            mainElement.scrollBy(0, -2 * cursorRect.height);
+            viewTop -= 2 * cursorRect.height;
+            viewBottom -= 2 * cursorRect.height;
+        } else if (viewBottom - cursorY < 200 && key === 'j' && cursorY < viewBottom) {
+            mainElement.scrollBy(0, 2 * cursorRect.height);
+            viewTop += 2 * cursorRect.height;
+            viewBottom += 2 * cursorRect.height;
+        } else if (cursorY < viewTop) {
+            mainElement.scrollTo(0, cursorY - 100);
+            viewTop = cursorY - 100;
+            viewBottom = cursorY + window.innerHeight - 100;
+        } else if (cursorY > viewBottom) {
+            mainElement.scrollTo(0, cursorY - window.innerHeight + 100);
+            viewTop = cursorY - window.innerHeight + 100;
+            viewBottom = cursorY + 100;
+        }
+
+        // update the position of the cursor
+        updateCursorStyle();
     }
 
     function handleCommand(cmd: string) {
         if (cmd === ':home') {
             page = 'Home';
-            goto('/', { replaceState: false });
+            pageChange = 0;
+            window.location.href = '/';
         } else if (cmd === ':blog') {
             page = 'Blog';
-            goto('/blog', { replaceState: false });
+            pageChange = 0;
+            window.location.href = '/blog';
         }
+    }
+
+    // handle scroll events
+    function handleScroll() {
+        viewTop = mainElement.scrollTop;
+        viewBottom = mainElement.scrollTop + mainElement.clientHeight;
+    }
+
+    // update cursor style by changing the location of the cursor
+    function updateCursorStyle() {
+        cursorStyle = lines[cursorRow][cursorCol] ? 
+            `left: ${lines[cursorRow][cursorCol].rect.left}px; 
+            top: ${lines[cursorRow][cursorCol].rect.y}px; 
+            width: ${lines[cursorRow][cursorCol].rect.width}px; 
+            height: ${lines[cursorRow][cursorCol].rect.height}px;` : '';
     }
 </script>
 
@@ -211,7 +271,7 @@
                 {/each}
             </div>
         </div>
-        <main bind:this={mainElement} class="flex-1 overflow-y-auto p-4 relative">
+        <main bind:this={mainElement} class="flex-1 overflow-y-auto p-4 relative" on:scroll={handleScroll}>
             <slot></slot>
             <div 
                 class="absolute bg-nvim-cursor opacity-50"
