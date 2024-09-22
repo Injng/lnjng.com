@@ -118,7 +118,12 @@
             } else if (event.key === 'Enter') {
                 inputNumber = false;
                 if (lines[cursorRow][cursorCol].href !== '') {
-                    goto(lines[cursorRow][cursorCol].href, { replaceState: false });
+                    // check for external links
+                    if (lines[cursorRow][cursorCol].href.startsWith('http')) {
+                        window.open(lines[cursorRow][cursorCol].href, '_blank');
+                    } else {
+                        goto(lines[cursorRow][cursorCol].href, { replaceState: false });
+                    }
                 } else {
                     moveCursor('j');
                 }
