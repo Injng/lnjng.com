@@ -79,7 +79,7 @@
                 newLines.push([char]);
             } else {
                 const currY = newLines[newLines.length - 1][0].rect.y;
-                if (char.rect.y !== currY) {
+                if (Math.abs(char.rect.y - currY) > 2) {
                     newLines.push([char]);
                 } else {
                     newLines[newLines.length - 1].push(char);
