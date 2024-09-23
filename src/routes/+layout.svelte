@@ -254,6 +254,11 @@
         }
     }
 
+    // handle link clicks in status bar
+    function goToPage(href: string) {
+        window.location.href = href;
+    }
+
     // handle scroll events
     function handleScroll() {
         viewTop = mainElement.scrollTop;
@@ -308,9 +313,9 @@
         <div id="mode" class="w-20">{mode}</div>
         <div id="command-line" class="flex-1 ml-2">{$input}</div>
         <div id="file-info">
-            <a href="/" class={linkStyles[0]}>Home</a>
-            <a href="/blog" class={linkStyles[1]}>Blog</a>
-            <a href="/about" class={linkStyles[2]}>About</a>
+            <a href="/" on:click|preventDefault={() => {goToPage("/")}} class={linkStyles[0]}>Home</a>
+            <a href="/blog" on:click|preventDefault={() => {goToPage("/blog")}} class={linkStyles[1]}>Blog</a>
+            <a href="/about" on:click|preventDefault={() => {goToPage("/about")}} class={linkStyles[2]}>About</a>
         </div>
         <div id="position" class="ml-2">{cursorRow + 1}:{cursorCol + 1}</div>
     </div>
