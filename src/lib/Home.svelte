@@ -14,12 +14,10 @@
         <div class="p-8 text-nvim-green text-left">
             <p>type  :about<span class="text-nvim-blue">&lt;Enter&gt;</span>            to view about information</p>
             <p>type  :blog<span class="text-nvim-blue">&lt;Enter&gt;</span>             to view blog posts</p>
-            <p>type  :contact<span class="text-nvim-blue">&lt;Enter&gt;</span>          to view contact details</p>
             <br>
             <p>type  /<span class="text-nvim-blue">&lt;Search term&gt;</span>           to search posts</p>
             <br>
             <p>type  :h<span class="text-nvim-blue">&lt;Enter&gt;</span>                to view the <a href="/help" class="underline text-nvim-blue hover:text-blue-800">help</a> page</p>
-            <p>type  :q<span class="text-nvim-blue">&lt;Enter&gt;</span>                to exit</p>
         </div>
     </div>
 </div>
