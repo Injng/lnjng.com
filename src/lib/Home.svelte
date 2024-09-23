@@ -15,8 +15,11 @@
             <p>type  :about<span class="text-nvim-blue">&lt;Enter&gt;</span>            to view about information</p>
             <p>type  :blog<span class="text-nvim-blue">&lt;Enter&gt;</span>             to view blog posts</p>
             <br>
+            <!--
+            [TODO] search feature
             <p>type  /<span class="text-nvim-blue">&lt;Search term&gt;</span>           to search posts</p>
             <br>
+            -->
             <p>type  :h<span class="text-nvim-blue">&lt;Enter&gt;</span>                to view the <a href="/help" class="underline text-nvim-blue hover:text-blue-800">help</a> page</p>
         </div>
     </div>
