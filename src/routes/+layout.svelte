@@ -7,7 +7,6 @@
     let mode = 'NORMAL';
     let page: string = 'Home';
     let mainElement: HTMLElement;
-    let pageChange = 0;
 
     // number of times to repeat command, and whether or not a number is being inputted
     let repeat = 1;
@@ -42,6 +41,7 @@
         window.addEventListener('resize', () => {
             viewBottom = window.innerHeight;
         });
+        page = window.location.pathname === '/' ? 'Home' : window.location.pathname.slice(1).charAt(0).toUpperCase() + window.location.pathname.slice(2);
     });
 
     /**
@@ -146,7 +146,6 @@
                     if (lines[cursorRow][cursorCol].href.startsWith('http')) {
                         window.open(lines[cursorRow][cursorCol].href, '_blank');
                     } else {
-                        pageChange = 0;
                         window.location.href = lines[cursorRow][cursorCol].href;
                     }
                 } else {
@@ -234,13 +233,11 @@
 
     function handleCommand(cmd: string) {
         if (cmd === ':home') {
-            page = 'Home';
-            pageChange = 0;
             window.location.href = '/';
         } else if (cmd === ':blog') {
-            page = 'Blog';
-            pageChange = 0;
             window.location.href = '/blog';
+        } else if (cmd === ':about') {
+            window.location.href = '/about';
         }
     }
 
