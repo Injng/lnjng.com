@@ -13,6 +13,9 @@
     <p>
         And vice versa for the other pages (see the Command Mode section below for more details).
     </p>
+    <p class="mt-4 text-nvim-blue">
+        Note for those on mobile: use the links in the status bar to navigate across the main pages.
+    </p>
     <h2>Modes</h2>
         <p>The UI operates in two modes:</p>
         <ul>
