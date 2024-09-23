@@ -1,11 +1,11 @@
 <script lang="ts">
     import { writable } from 'svelte/store';
-    import { onMount } from 'svelte';
+    import { onMount, afterUpdate } from 'svelte';
     import '../app.css';
 
     const input = writable('');
     let mode = 'NORMAL';
-    let page: string = 'Home';
+    let page = '';
     let mainElement: HTMLElement;
 
     // number of times to repeat command, and whether or not a number is being inputted
@@ -41,8 +41,19 @@
         window.addEventListener('resize', () => {
             viewBottom = window.innerHeight;
         });
-        page = window.location.pathname === '/' ? 'Home' : window.location.pathname.slice(1).charAt(0).toUpperCase() + window.location.pathname.slice(2);
+        updatePage();
     });
+
+    afterUpdate(() => {
+        updatePage();
+    });
+
+    function updatePage() {
+        const newPage = window.location.pathname === '/' ? 'Home' : window.location.pathname.slice(1).charAt(0).toUpperCase() + window.location.pathname.slice(2);
+        if (newPage !== page) {
+            page = newPage;
+        }
+    }
 
     /**
      * Update the characters array with the current characters and their bounding rects
@@ -257,6 +268,21 @@
             width: ${lines[cursorRow][cursorCol].rect.width}px; 
             height: ${lines[cursorRow][cursorCol].rect.height}px;` : '';
     }
+
+    // get style for status bar footer links
+    function getLinkStyle(href: string): string[] {
+        if (href === "Home") {
+            return ['', 'text-nvim-gray underline', 'text-nvim-gray underline'];
+        } else if (href === "Blog") {
+            return ['text-nvim-gray underline', '', 'text-nvim-gray underline'];
+        } else if (href === "About") {
+            return ['text-nvim-gray underline', 'text-nvim-gray underline', ''];
+        } else {
+            return ['text-nvim-gray underline', 'text-nvim-gray underline', 'text-nvim-gray underline'];
+        }
+    }
+
+    $: linkStyles = getLinkStyle(page);
 </script>
 
 <svelte:window on:keydown={handleKeydown} />
@@ -281,7 +307,11 @@
     <div id="status-bar" class="bg-nvim-statusline text-nvim-fg h-6 px-2 flex items-center justify-between text-sm">
         <div id="mode" class="w-20">{mode}</div>
         <div id="command-line" class="flex-1 ml-2">{$input}</div>
-        <div id="file-info">{page}</div>
+        <div id="file-info">
+            <a href="/" class={linkStyles[0]}>Home</a>
+            <a href="/blog" class={linkStyles[1]}>Blog</a>
+            <a href="/about" class={linkStyles[2]}>About</a>
+        </div>
         <div id="position" class="ml-2">{cursorRow + 1}:{cursorCol + 1}</div>
     </div>
 </body>
