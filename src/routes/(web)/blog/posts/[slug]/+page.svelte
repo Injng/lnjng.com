@@ -1,5 +1,5 @@
 <script lang="ts">
-    import '../../../../prism.css';
+    import '../../../../../prism.css';
 
 	export let data;
 </script>

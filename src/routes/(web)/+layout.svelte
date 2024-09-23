@@ -1,8 +1,10 @@
 <script lang="ts">
     import { writable } from 'svelte/store';
+    import { isTerm } from '../stores';
     import { onMount, afterUpdate } from 'svelte';
-    import '../app.css';
+    import '../../app.css';
 
+    isTerm.set(0);
     const input = writable('');
     let mode = 'NORMAL';
     let page = '';
@@ -251,6 +253,9 @@
             window.location.href = '/about';
         } else if (cmd === ':help' || cmd === ':h') {
             window.location.href = '/help';
+        } else if (cmd === ':wq' || cmd === ':q' || cmd === ':q!' || cmd === ':wq!') {
+            isTerm.set(1);
+            window.location.href = '/escape';
         }
     }
 
