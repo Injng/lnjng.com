@@ -22,5 +22,8 @@
         <p class="mb-4">
             — Harold Finch in Person of Interest, “2πr”
         </p>
+        <p class="mt-4 text-nvim-gray">
+            Type <span class="text-nvim-blue">:home&lt;Enter&gt;</span> to return to the home page
+        </p>
 	</div>
 </div>
