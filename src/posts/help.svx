@@ -1,0 +1,65 @@
+---
+title: Help
+date: '2024-03-19'
+categories:
+  - cs
+published: true
+---
+
+Welcome to my Vim-inspired user interface! This page will guide you through the available commands and navigation options.
+Note that if you are unfamiliar with the navigation system, the standard clicking on links and scrolling will still work.
+
+## Modes
+
+The UI operates in two modes:
+
+- NORMAL mode: For navigation and command input.
+- COMMAND mode: For executing specific commands.
+
+## Navigation (NORMAL mode)
+Use the following keys to navigate:
+
+- `h`: Move cursor left
+- `j`: Move cursor down
+- `k`: Move cursor up
+- `l`: Move cursor right
+- `0`: Move to the beginning of the line
+- `$`: Move to the end of the line
+
+You can prefix these commands with a number to repeat the action. For example, 5j will move the cursor down 5 lines.
+
+### Special Actions
+
+- `Enter`: Follow a link if the cursor is on one, or move to the next line
+- `Esc`: Hide the cursor and cancel number input
+
+## Command Mode
+To enter Command mode:
+
+1. Press : in NORMAL mode
+2. Type your command
+3. Press Enter to execute the command
+
+Available commands:
+
+- `:home`: Go to the home page
+- `:blog`: Go to the blog page
+- `:about`: Go to the about page
+
+To exit Command mode without executing a command, press Esc.
+
+## Status Bar
+The status bar at the bottom of the screen displays:
+
+- Current mode (NORMAL or COMMAND)
+- Command being typed (in Command mode)
+- Current page name
+- Cursor position (row:column)
+
+## Tips
+
+The UI will automatically scroll to keep the cursor visible.
+You can use the mouse wheel or touchpad to scroll the content.
+The left sidebar displays line numbers for reference.
+
+Enjoy navigating with your keyboard!

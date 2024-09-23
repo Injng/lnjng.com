@@ -238,6 +238,8 @@
             window.location.href = '/blog';
         } else if (cmd === ':about') {
             window.location.href = '/about';
+        } else if (cmd === ':help' || cmd === ':h') {
+            window.location.href = '/help';
         }
     }
 
