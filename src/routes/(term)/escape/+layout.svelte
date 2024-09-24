@@ -18,10 +18,6 @@
 
 {#if showTerm}
     <slot></slot>
-{:else if !showTerm}
-    <div class="bg-black text-green-400 p-4 font-mono h-screen flex flex-col">
-        Have you exited vim?
-    </div>
 {:else}
     <div class="bg-black text-green-400 p-4 font-mono h-screen flex flex-col">
     </div>

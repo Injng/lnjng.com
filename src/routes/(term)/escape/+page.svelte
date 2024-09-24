@@ -17,12 +17,20 @@
                 case 'clear':
                     commandHistory = [];
                     break;
+                case 'login':
+                    commandHistory = [...commandHistory, { type: 'command', text: currentCommand }];
+                    commandHistory = [...commandHistory, { type: 'response', text: 'Accessing ATLAS...' }];
+                    setTimeout(() => {
+                        window.location.href = '/escape/auth';
+                    }, 1000);
+                    break;
                 case 'help':
                     commandHistory = [...commandHistory, { type: 'command', text: currentCommand }];
                     commandHistory = [...commandHistory, { type: 'response', text: 'Available commands:' }];
                     commandHistory = [...commandHistory, { type: 'response', text: 'exit - Exit terminal' }];
                     commandHistory = [...commandHistory, { type: 'response', text: 'clear - Clear terminal' }];
                     commandHistory = [...commandHistory, { type: 'response', text: 'vim - Go back to vim' }];
+                    commandHistory = [...commandHistory, { type: 'response', text: 'login - Login to ATLAS' }];
                     commandHistory = [...commandHistory, { type: 'response', text: 'help - Show available commands' }];
                     break;
                 case 'vim':
