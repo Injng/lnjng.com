@@ -245,17 +245,28 @@
     }
 
     function handleCommand(cmd: string) {
-        if (cmd === ':home') {
+      if (cmd === ':home' || cmd === ':h') {
             window.location.href = '/';
-        } else if (cmd === ':blog') {
+      } else if (cmd === ':blog' || cmd === ':b') {
             window.location.href = '/blog';
-        } else if (cmd === ':about') {
+      } else if (cmd === ':about' || cmd === ':a') {
             window.location.href = '/about';
         } else if (cmd === ':help' || cmd === ':h') {
             window.location.href = '/help';
         } else if (cmd === ':wq' || cmd === ':q' || cmd === ':q!' || cmd === ':wq!') {
             isTerm.set(1);
             window.location.href = '/escape';
+        } else if (cmd === ':index' || cmd === ':i') {
+          const path: string[] = window.location.href.split('/');
+          if (path[3] === 'notes') {
+            if (path.length === 5) {
+              window.location.href = '/notes';
+            } else if (path.length === 6) {
+              window.location.href = `/notes/${path[4]}`;
+            } else if (path.length === 7) {
+              window.location.href = `/notes/${path[4]}/${path[5]}`;
+            }
+          }
         }
     }
 
@@ -282,13 +293,15 @@
     // get style for status bar footer links
     function getLinkStyle(href: string): string[] {
         if (href === "Home") {
-            return ['', 'text-nvim-gray underline', 'text-nvim-gray underline'];
+          return ['', 'text-nvim-gray underline', 'text-nvim-gray underline', 'text-nvim-gray underline'];
         } else if (href === "Blog") {
-            return ['text-nvim-gray underline', '', 'text-nvim-gray underline'];
+          return ['text-nvim-gray underline', '', 'text-nvim-gray underline', 'text-nvim-gray underline'];
         } else if (href === "About") {
-            return ['text-nvim-gray underline', 'text-nvim-gray underline', ''];
+          return ['text-nvim-gray underline', 'text-nvim-gray underline', '', 'text-nvim-gray underline'];
+        } else if (href === "Notes") {
+          return ['text-nvim-gray underline', 'text-nvim-gray underline', 'text-nvim-gray underline', ''];
         } else {
-            return ['text-nvim-gray underline', 'text-nvim-gray underline', 'text-nvim-gray underline'];
+          return ['text-nvim-gray underline', 'text-nvim-gray underline', 'text-nvim-gray underline', 'text-nvim-gray underline'];
         }
     }
 
@@ -321,6 +334,7 @@
             <a href="/" on:click|preventDefault={() => {goToPage("/")}} class={linkStyles[0]}>Home</a>
             <a href="/blog" on:click|preventDefault={() => {goToPage("/blog")}} class={linkStyles[1]}>Blog</a>
             <a href="/about" on:click|preventDefault={() => {goToPage("/about")}} class={linkStyles[2]}>About</a>
+            <a href="/notes" on:click|preventDefault={() => {goToPage("/notes")}} class={linkStyles[3]}>Notes</a>
         </div>
         <div id="position" class="ml-2">{cursorRow + 1}:{cursorCol + 1}</div>
     </div>

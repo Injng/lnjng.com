@@ -1,0 +1,7 @@
+---
+title: 'Canvas'
+---
+
+## `<canvas [height] [moz-opaque] [width]>`
+- `[height]`: height in pixels, default 150
+- `[width]`: width in pixels, default 300
