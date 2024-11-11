@@ -14,6 +14,7 @@
         <div class="p-8 text-nvim-green text-left">
             <p>type  :about<span class="text-nvim-blue">&lt;Enter&gt;</span>            to view about information</p>
             <p>type  :blog<span class="text-nvim-blue">&lt;Enter&gt;</span>             to view blog posts</p>
+            <p>type  :notes<span class="text-nvim-blue">&lt;Enter&gt;</span>             to view notes</p>
             <br>
             <!--
             [TODO] search feature

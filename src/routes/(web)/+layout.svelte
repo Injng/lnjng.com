@@ -267,6 +267,8 @@
               window.location.href = `/notes/${path[4]}/${path[5]}`;
             }
           }
+        } else if (cmd === ':notes' || cmd === ':n') {
+          window.location.href = '/notes';
         }
     }
 
