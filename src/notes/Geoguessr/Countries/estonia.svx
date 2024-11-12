@@ -1,0 +1,7 @@
+---
+title: 'Estonia'
+---
+## Identifying the Country
+- outer road lines are often short, dashed white lines
+- often have square concrete poles with distinctive diagonal supports:
+![Estonia concrete poles](/estonia_concrete_pole.png "Estonia concrete poles")

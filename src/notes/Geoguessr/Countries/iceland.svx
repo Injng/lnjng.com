@@ -1,0 +1,7 @@
+---
+title: 'Iceland'
+---
+## Identifying the Country
+- often looks barren
+- language often very recognizable:
+![Icelandic language](/iceland_language.png "Icelandic language")

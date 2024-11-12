@@ -1,0 +1,8 @@
+---
+title: 'Uruguay'
+---
+## Identifying the Country
+Here we see a typical Uruguay round:
+![Uruguay vibes](/uruguay.png "Typical Uruguay round")
+- Spanish language
+- black Google car
