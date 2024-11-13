@@ -1,0 +1,41 @@
+---
+title: 'Initialization'
+---
+## Minimal Starting Point
+```rust
+use sdl2::event::Event;
+
+fn main() {
+    // initialize SDL contexts and windows
+    let sdl_context = sdl2::init().unwrap();
+    let video_subsystem = sdl_context.video().unwrap();
+    let window = video_subsystem.window("Test", 1280, 720)
+        .position_centered()   // centers the window on the screen
+        .resizable()           // makes the window resizable
+        .build()
+        .unwrap();
+    let mut canvas = window.into_canvas().build().unwrap();
+    let mut event_pump = sdl_context.event_pump().unwrap();
+
+    // present canvas
+    canvas.clear();
+    canvas.present();
+
+    // render loop
+    'running: loop {
+        canvas.clear();
+        
+        // handle events
+        for event in event_pump.poll_iter() {
+            match event {
+                Event::Quit { .. } => {
+                    break 'running
+                },
+                _ => {}
+            }
+        }
+        
+        canvas.present();
+    }
+}
+```

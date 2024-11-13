@@ -1,0 +1,29 @@
+---
+title: 'Canvas'
+---
+## Initialization
+To initialize a Canvas struct, use a `Window`:
+```rust
+let mut canvas = window.into_canvas().build().unwrap();
+```
+
+## Set Draw Color
+To set the draw color for the Canvas, use a [Color](/notes/SDL2-rs/Pixels/Color):
+```rust
+// pub fn set_draw_color<C: Into<Color>>(&mut self, color: C)
+canvas.set_draw_color(Color::WHITE);
+```
+
+## Clear Canvas
+To clear the Canvas with the draw color:
+```rust
+// pub fn clear(&mut self)
+canvas.clear();
+```
+
+## Present Canvas
+To present the actual canvas onto the screen, updating any buffered rendering changes:
+```rust
+// pub fn present(&mut self)
+canvas.present();
+```

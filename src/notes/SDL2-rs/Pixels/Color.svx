@@ -1,0 +1,28 @@
+---
+title: 'Color'
+---
+## Pre-defined Colors
+```rust
+pub const WHITE: Color = Color::RGBA(255, 255, 255, 255);
+pub const BLACK: Color = Color::RGBA(0, 0, 0, 255);
+pub const GRAY: Color = Color::RGBA(128, 128, 128, 255);
+pub const GREY: Color = Color::GRAY;
+pub const RED: Color = Color::RGBA(255, 0, 0, 255);
+pub const GREEN: Color = Color::RGBA(0, 255, 0, 255);
+pub const BLUE: Color = Color::RGBA(0, 0, 255, 255);
+pub const MAGENTA: Color = Color::RGBA(255, 0, 255, 255);
+pub const YELLOW: Color = Color::RGBA(255, 255, 0, 255);
+pub const CYAN: Color = Color::RGBA(0, 255, 255, 255);
+```
+## Manually Setting Colors
+```rust
+pub struct Color {
+    pub r: u8,
+    pub g: u8,
+    pub b: u8,
+    pub a: u8,
+}
+
+pub const fn RGB(r: u8, g: u8, b: u8) -> Color
+pub const fn RGBA(r: u8, g: u8, b: u8, a: u8) -> Color
+```
