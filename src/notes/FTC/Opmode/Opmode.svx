@@ -1,0 +1,17 @@
+---
+title: 'Opmode'
+---
+## Basic Structure
+An Opmode defines the program to be run on the robot. To make a Java class an Opmode, the
+class must extend either `OpMode` or `LinearOpMode`.
+```java
+public class TestOpMode extends OpMode {
+    public void init() {
+        // initialize class variables here
+    }
+
+    public void loop() {
+        // do program loop here
+    }
+}
+```
