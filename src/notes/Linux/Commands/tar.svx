@@ -1,0 +1,27 @@
+---
+title: 'tar'
+---
+## Usage
+Since modern versions of tar can auto-detect file format, use:
+```
+tar -xf [file]
+```
+
+For verbose output:
+```
+tar -xvf [file
+```
+## Flags
+Extraction flags:
+- `-x`: extract
+- `-f`: specify file
+- `-v`: verbose output
+- `-C`: extract to specific directory
+- `-t`: list contents without extracting
+Archive format flags:
+- `-z`: gzip compression
+- `-j`: bzip2 compression
+- `-J`: xz compression
+- `--lzip`: lzip compression
+- `--lzma`: lzma compression
+- `--lzop`: lzop compression
