@@ -1,0 +1,24 @@
+---
+title: 'Rect'
+---
+A (non-empty) rectangle.
+
+The width and height of a `Rect` must always be strictly positive (never zero). In cases where 
+empty rects may need to represented, it is recommended to use `Option<Rect>`, with `None` 
+representing an empty rectangle (see, for example, the output of the intersection method).
+
+## Create New Rect
+The width and height are clamped to ensure that the right and bottom sides of the rectangle 
+does not exceed `i32::MAX` (the value 2147483647, the maximal positive size of an i32). This 
+means that the rect size will behave oddly if you move it very far to the right or downwards 
+on the screen.
+
+Rects must always be non-empty, so a width and/or height argument of 0 will be replaced with 1.
+
+```rust
+pub fn new(x: i32, y: i32, width: u32, height: u32) -> Rect
+```
+
+## Draw Rect
+To draw the `Rect` on a `Canvas`, use `draw_rect` [here](/notes/SDL2-rs/render/Canvas). Note 
+that this only draws an outline of a rect, to fill it, use `fill_rect`.

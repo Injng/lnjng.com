@@ -10,39 +10,51 @@ let mut canvas = window.into_canvas().build().unwrap();
 ## Set Draw Color
 To set the draw color for the Canvas, use a [Color](/notes/SDL2-rs/pixels/Color):
 ```rust
-// pub fn set_draw_color<C: Into<Color>>(&mut self, color: C)
-canvas.set_draw_color(Color::WHITE);
+pub fn set_draw_color<C: Into<Color>>(&mut self, color: C)
 ```
 
 ## Clear Canvas
 To clear the Canvas with the draw color:
 ```rust
-// pub fn clear(&mut self)
-canvas.clear();
+pub fn clear(&mut self)
 ```
 
 ## Present Canvas
 To present the actual canvas onto the screen, updating any buffered rendering changes:
 ```rust
-// pub fn present(&mut self)
-canvas.present();
+pub fn present(&mut self)
 ```
 
 ## Draw Line
 To draw a line on the canvas, use a start and end [Point](/notes/SDL2-rs/rect/Point):
 ```rust
-/*
 pub fn draw_line<P1: Into<Point>, P2: Into<Point>>(
         &mut self,
         start: P1,
         end: P2,
     ) -> Result<(), String>
-*/
+```
+
+## Draw Rectangle
+To draw a rectangle on the canvas, pass in a [Rect](/notes/SDL2-rs/rect/Rect) to `draw_rect`:
+```rust
+pub fn draw_rect(&mut self, rect: Rect) -> Result<(), String>
+```
+
+NOTE: This only draws an outline of the rectangle. To fill the rectangle, use `fill_rect` 
+instead:
+
+## Fill Rectangle
+To fill a rectangle on the canvas, pass in a [Rect](/notes/SDL2-rs/rect/Rect) to `fill_rect`:
+```rust
+pub fn fill_rect<R: Into<Option<Rect>>>(
+        &mut self,
+        rect: R,
+    ) -> Result<(), String>
 ```
 
 ## Get Output Size
 To get the output or window size, use the `output_size()` method:
 ```rust
-// pub fn output_size(&self) -> Result<(u32, u32), String>
-let screen_size: (u32, u32) = canvas.output_size().unwrap();
+pub fn output_size(&self) -> Result<(u32, u32), String>
 ```
