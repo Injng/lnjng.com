@@ -1,0 +1,9 @@
+---
+title: 'Point'
+---
+## Create New Point
+```rust
+pub fn new(x: i32, y: i32) -> Point
+```
+
+Oftentimes, we want to switch between grid coordinates and screen coordinates. See [here](/notes/SDL2-rs/Guide/Coordinates) to see examples of how to do this.

@@ -1,0 +1,63 @@
+---
+title: 'Coordinates'
+---
+## Converting
+Oftentimes, your application has a grid or some kind of coordinate system of its own that must
+be matched to the absolute coordinates on the screen. To do this, and to avoid confusion
+later on down the road as to which coordinates you are using, it is often useful to define
+a helper struct `Vector2` to handle this conversion for you:
+
+```rust
+const CELL_SIZE: u32 = 30;
+const BUFFER_SIZE: u32 = 60;
+
+/// Struct to convert between grid coordinates and screen coordinates
+struct Vector2 {
+    x: i32,
+    y: i32,
+}
+
+impl Vector2 {
+    fn new(x: i32, y: i32) -> Self {
+        Vector2 { x, y }
+    }
+
+    fn to_screen(&self) -> Vector2 {
+        let x: i32 = (BUFFER_SIZE as i32) * self.x * (CELL_SIZE as i32);
+        let y: i32 = (BUFFER_SIZE as i32) * self.y * (CELL_SIZE as i32);
+        Vector2 { x, y }
+    }   
+}
+
+impl Into<Point> for Vector2 {
+    fn into(self) -> Point {
+        Point::new(self.x, self.y)
+    }
+}
+```
+
+In this example, the grid coordinates are calculated relative to a buffer surrounding the grid 
+whose size is denoted by `BUFFER_SIZE`, and each individual `CELL_SIZE`.
+
+Sometimes, you also need to get all of the important critical points regarding a cell. To do 
+this, we can create another class to derive these points from a single point:
+
+```rust
+struct Cell {
+    top_left: Vector2,
+    top_right: Vector2,
+    bottom_left: Vector2,
+    bottom_right: Vector2,
+}
+
+impl Cell {
+    fn from_top_left(location: Vector2) -> Self {
+        Cell {
+            top_left: Vector2::new(location.x, location.y),
+            top_right: Vector2::new(location.x + CELL_SIZE, location.y),
+            bottom_left: Vector2::new(location.x, location.y + CELL_SIZE),
+            bottom_right: Vector2::new(location.x + CELL_SIZE, location.y + CELL_SIZE),
+        }
+    }
+}
+```

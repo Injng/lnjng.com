@@ -2,3 +2,32 @@
 title: 'Roadrunner'
 ---
 Official documentation can be found at [https://rr.brott.dev/docs/](https://rr.brott.dev/docs/).
+## Tuning
+The following directions are for Mecanum drives, with three dead wheels:
+### Drive Classes
+1. Configure the motors as `leftFront`, `leftBack`, `rightBack`, and `rightFront`
+2. Configure the IMU as `imu`
+3. Set the logo and USB direction of the IMU in the class code according to examples [here](https://ftc-docs.firstinspires.org/en/latest/programming_resources/imu/imu.html?highlight=imu#physical-hub-mounting). For example:
+```java
+public RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection =
+    RevHubOrientationOnRobot.LogoFacingDirection.LEFT;
+public RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection =
+    RevHubOrientationOnRobot.UsbFacingDirection.UP;
+```
+4. In `TuningOpModes.java`, set `DRIVE_CLASS`:
+```java
+public static final Class<?> DRIVE_CLASS = MecanumDrive.class;
+```
+5. In line 242 of `MecanumDrive.java`, set localizer:
+```java
+localizer = new ThreeDeadWheelLocalizer(hardwareMap, PARAMS.inPerTick);
+```
+6. Plug the encoder wires into the ports corresponding to the correct motors. Note that for technical reasons, ports 0 and 3 and the REV hub are faster, and so should be used for the parallel encoders.
+7. Change the configuration for the motor names in `ThreeDeadWheelLocalizer.java` to match the corresponding motors that the encoders were plugged into:
+```java
+par0 = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "leftFront")));
+par1 = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "rightBack")));
+perp = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "leftBack")));
+```
+8. Configure the parallel encoders to be named `par0` and `par1`, and the perpendicular encoder to be named `perp`
+

@@ -1,0 +1,23 @@
+---
+title: 'Window'
+---
+Represents the “shell” of a `Window`.
+
+You can set get and set many of the `SDL_Window` properties (i.e., border, size, PixelFormat, 
+etc).
+
+However, you cannot directly access the pixels of the `Window`. It needs to be converted to a 
+`Canvas` to access the rendering functions.
+
+Note: If a `Window` goes out of scope but it cloned its context, then the `SDL_Window` will not 
+be destroyed until there are no more references to the `WindowContext`. This may happen when a 
+`TextureCreator<Window>` outlives the `Canvas<Window>`.
+
+## Get Size of Window
+Note that oftentimes this is not the method to be called. If you want to get size of a 
+`Window` inside of a running loop that is handled by a `Canvas`, oftentimes you need to call
+`output_size` in [Canvas](/notes/SDL2-rs/render/Canvas).
+```rust
+pub fn size(&self) -> (u32, u32)
+```
+    
