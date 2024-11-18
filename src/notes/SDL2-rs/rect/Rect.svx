@@ -22,3 +22,12 @@ pub fn new(x: i32, y: i32, width: u32, height: u32) -> Rect
 ## Draw Rect
 To draw the `Rect` on a `Canvas`, use `draw_rect` [here](/notes/SDL2-rs/render/Canvas). Note 
 that this only draws an outline of a rect, to fill it, use `fill_rect`.
+
+## If Rectangle Contains Point
+Sometimes you want to check if a rectangle contains a certain point, for example when checking
+if a user clicks within a button. To do so, simply use the `contains_point` method:
+```rust
+pub fn contains_point<P>(&self, point: P) -> bool
+    where
+        P: Into<(i32, i32)>,
+```
