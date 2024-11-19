@@ -1,0 +1,115 @@
+---
+title: 'Text'
+---
+Text in SDL2 is often a very elusive subject. The most naive method to render text involves
+creating a `Surface`, rendering that to a `Texture`, and then copying that to the 
+`Canvas`. But this is highly inefficient by itself, as creating and destroying textures
+every render frame is not ideal.
+
+## Load Fonts
+Before we can render any text, we must first load fonts from `sdl2::ttf` (this is a feature
+that must be enabled). If we have a ttf file somewhere on the filesystem, we can load the
+font from there, for example:
+
+```rust
+let ttf_context: Sdl2TtfContext = ttf::init().expect("Failed to initialize TTF context");
+let font: Font = ttf_context
+    .load_font("/usr/local/share/fonts/ttf/Fira/FiraSans-Regular.ttf", 16)
+    .expect("Failed to load font");
+```
+
+This utilizes the `load_font` method from [Sdl2TtfContext](/notes/SDL2-rs/ttf/Sdl2TtfContext).
+
+However, sometimes we can't ensure that the user has a specific font. Another method that we 
+can use is to bundle the font bytes directly with the application. To do so, use the
+`includ_bytes!` macro to load it into a font byte array, and then load that from `RWops`:
+
+```rust
+const FONT_BYTES: &[u8] = include_bytes!("../assets/fonts/FiraSans-Regular.ttf");
+
+let ttf_context: Sdl2TtfContext = ttf::init().expect("Failed to initialize TTF context")
+let font = ttf_context
+    .load_font_from_rwops(
+        rwops::RWops::from_bytes(FONT_BYTES).unwrap(),
+        16,
+    ).unwrap();
+```
+
+This utilizes the `load_font_from_rwops` method from 
+[Sdl2TtfContext](/notes/SDL2-rs/ttf/Sdl2TtfContext).
+
+## Render Text to Texture
+Here is a function to render a given string `text: &str`, and a provided font `font: &Font`,
+to return a texture:
+
+```rust
+/// Render text into a Texture
+pub fn render_text<'a>(
+    texture_creator: &'a TextureCreator<WindowContext>, 
+    font: &Font, 
+    text: &str
+) -> Texture<'a> {
+    let text_surface: Surface = font
+        .render(text)
+        .blended(Color::BLACK)
+        .expect("Failed to render text");
+    texture_creator.create_texture_from_surface(text_surface).unwrap()
+}
+```
+
+This needs a `TextureCreator`, which we can create from a [Canvas](/notes/SDL2-rs/render/Canvas)
+using the `texture_creator()` method.
+
+However, doing this every time we want to render text is very inefficient. Better would be
+to cache the rendered textures so that we won't have to create a new texture every time. Here
+is an implementation of a `TextCache`, which uses a `HashMap<String, Texture>` to store
+cached textures:
+
+```rust
+pub struct TextCache<'creator, 'font> {
+    texture_creator: &'creator TextureCreator<WindowContext>,
+    font: &'font Font<'font, 'static>,
+    textures: HashMap<String, Texture<'creator>>,
+}
+
+impl<'creator, 'font> TextCache<'creator, 'font> {
+    pub fn new(
+        texture_creator: &'creator TextureCreator<WindowContext>, 
+        font: &'font Font<'font, 'static>
+    ) -> Self {
+        TextCache {
+            texture_creator,
+            font,
+            textures: HashMap::new(),
+        }
+    }
+
+    /// Render text by getting the texture from the hashmap, or creating a new one
+    pub fn render_text(&mut self, text: &str) -> &Texture<'creator> {
+        if self.textures.contains_key(text) {
+            return &self.textures[text];
+        } else {
+            let text_surface: Surface = self.font
+                .render(text)
+                .blended(Color::BLACK)
+                .expect("Failed to render text");
+            let text_texture: Texture = self.texture_creator.create_texture_from_surface(text_surface).unwrap();
+            self.textures.insert(text.to_string(), text_texture);
+            return &self.textures[text];
+        }
+    }
+}
+```
+
+## Displaying Text
+To display the text texture, you will have to copy it into a `Rect` from `Canvas:
+```rust
+let dimensions = font.size_of(text).unwrap();
+canvas
+    .copy(
+        &text_texture.unwrap(),
+        None,
+        Some(Rect::new(x, y, dimensions.0, dimensions.1)),
+    )
+    .unwrap();
+```

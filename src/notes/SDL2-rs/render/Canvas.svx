@@ -127,3 +127,14 @@ To get the output or window size, use the `output_size()` method:
 ```rust
 pub fn output_size(&self) -> Result<(u32, u32), String>
 ```
+
+## Create a TextureCreator
+Returns a `TextureCreator` that can create Textures to be drawn on this `Canvas`
+
+This `TextureCreator` will share a reference to the renderer and target context.
+
+The target (i.e., `Window`) will not be destroyed and the SDL_Renderer will not be destroyed if 
+the `TextureCreator` is still in scope.
+```rust
+pub fn texture_creator(&self) -> TextureCreator<SurfaceContext<'s>>
+```

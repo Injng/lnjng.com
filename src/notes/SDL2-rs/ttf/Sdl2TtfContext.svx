@@ -1,0 +1,23 @@
+---
+title: 'Sdl2TtfContext'
+---
+## Load Font From File
+To load a font from a given file, with a specified font size:
+```rust
+pub fn load_font<P: AsRef<Path>>(
+        &self,
+        path: P,
+        point_size: u16,
+    ) -> Result<Font<'_, 'static>, String>
+```
+
+## Load Font from RWops
+Loads a font from the given SDL2 rwops object with the given size in points.
+```rust
+pub fn load_font_from_rwops<'ttf, 'r>(
+        &'ttf self,
+        rwops: RWops<'r>,
+        point_size: u16,
+    ) -> Result<Font<'ttf, 'r>, String>
+```
+    
